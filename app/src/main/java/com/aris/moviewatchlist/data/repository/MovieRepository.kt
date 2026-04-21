@@ -18,8 +18,8 @@ class MovieRepository(private val movieDao: MovieDao) {
         return movieDao.getMoviesByGenre(genre)
     }
 
-    suspend fun insertMovie(movie: MovieEntity) {
-        movieDao.insertMovie(movie)
+    suspend fun insertMovie(movie: MovieEntity): Long {
+        return movieDao.insertMovie(movie)
     }
 
     suspend fun updateMovie(movie: MovieEntity) {

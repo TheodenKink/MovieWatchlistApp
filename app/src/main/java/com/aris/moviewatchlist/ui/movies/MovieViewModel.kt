@@ -26,10 +26,18 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    suspend fun insertMovieAndReturnId(movie: MovieEntity): Long {
+        return repository.insertMovie(movie)
+    }
+
     fun updateMovie(movie: MovieEntity) {
         viewModelScope.launch {
             repository.updateMovie(movie)
         }
+    }
+
+    suspend fun updateMovieAndWait(movie: MovieEntity) {
+        repository.updateMovie(movie)
     }
 
     fun deleteMovie(movie: MovieEntity) {

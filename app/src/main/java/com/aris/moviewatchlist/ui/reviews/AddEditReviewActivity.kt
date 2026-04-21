@@ -77,8 +77,14 @@ class AddEditReviewActivity : AppCompatActivity() {
             return
         }
 
+        if (rating !in 0.0..5.0) {
+            Toast.makeText(this, "Rating must be between 0 and 5", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val review = Review(
             reviewId = reviewId,
+            movieId = intent.getIntExtra("movieId", 0),
             movieTitle = movieTitle,
             username = username,
             rating = rating,

@@ -32,7 +32,7 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Username - 8/10 - 2026-04-21"
+            android:text="Username - 4.5/5 - 2026-04-21"
             android:textColor="#666666"
             android:textSize="14sp" />
 

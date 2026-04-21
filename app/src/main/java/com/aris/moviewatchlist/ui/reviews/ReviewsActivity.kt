@@ -41,6 +41,7 @@ class ReviewsActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        binding.fabAddReview.visibility = View.GONE
         binding.fabAddReview.setOnClickListener {
             startActivity(Intent(this, AddEditReviewActivity::class.java))
         }
@@ -64,6 +65,7 @@ class ReviewsActivity : AppCompatActivity() {
         val intent = Intent(this, AddEditReviewActivity::class.java).apply {
             putExtra("reviewId", review.reviewId)
             putExtra("movieTitle", review.movieTitle)
+            putExtra("movieId", review.movieId)
             putExtra("username", review.username)
             putExtra("rating", review.rating)
             putExtra("comment", review.comment)

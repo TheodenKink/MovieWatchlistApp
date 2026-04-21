@@ -48,7 +48,7 @@ class ReviewsRepository(
         val reviewsCollection = firestore?.collection("reviews")
         return observeReviewQuery(
             query = reviewsCollection
-                ?.whereGreaterThanOrEqualTo("rating", 8.0)
+                ?.whereGreaterThanOrEqualTo("rating", 4.0)
                 ?.orderBy("rating", Query.Direction.DESCENDING)
         )
     }
@@ -129,6 +129,55 @@ class ReviewsRepository(
             .addOnFailureListener { onComplete(false, it.message) }
     }
 
+    fun upsertMovieReview(
+        movieId: Int,
+        movieTitle: String,
+        rating: Double,
+        comment: String,
+        dateWatched: String,
+        username: String = "Me",
+        onComplete: (Boolean, String?) -> Unit
+    ) {
+        if (movieId <= 0) {
+            onComplete(false, "Missing movie id")
+            return
+        }
+
+        val reviewsCollection = firestore?.collection("reviews")
+        if (reviewsCollection == null) {
+            onComplete(false, FIREBASE_NOT_CONFIGURED)
+            return
+        }
+
+        val documentId = movieReviewDocumentId(movieId)
+        val review = Review(
+            reviewId = documentId,
+            movieId = movieId,
+            movieTitle = movieTitle,
+            username = username,
+            rating = rating,
+            comment = comment,
+            dateWatched = dateWatched
+        )
+
+        reviewsCollection.document(documentId)
+            .set(review)
+            .addOnSuccessListener { onComplete(true, null) }
+            .addOnFailureListener { onComplete(false, it.message) }
+    }
+
+    fun deleteMovieReview(
+        movieId: Int,
+        onComplete: (Boolean, String?) -> Unit
+    ) {
+        if (movieId <= 0) {
+            onComplete(false, "Missing movie id")
+            return
+        }
+
+        deleteReview(movieReviewDocumentId(movieId), onComplete)
+    }
+
     fun deleteReview(
         reviewId: String,
         onComplete: (Boolean, String?) -> Unit
@@ -158,5 +207,7 @@ class ReviewsRepository(
     companion object {
         private const val FIREBASE_NOT_CONFIGURED =
             "Firebase is not configured. Add app/google-services.json first."
+
+        private fun movieReviewDocumentId(movieId: Int): String = "movie_$movieId"
     }
 }

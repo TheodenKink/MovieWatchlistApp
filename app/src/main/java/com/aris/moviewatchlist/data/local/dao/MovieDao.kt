@@ -8,7 +8,7 @@ import com.aris.moviewatchlist.data.local.entity.MovieEntity
 interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movie: MovieEntity)
+    suspend fun insertMovie(movie: MovieEntity): Long
 
     @Update
     suspend fun updateMovie(movie: MovieEntity)

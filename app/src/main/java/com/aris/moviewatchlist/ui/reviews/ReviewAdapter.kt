@@ -21,7 +21,7 @@ class ReviewAdapter(
 
         fun bind(review: Review) {
             binding.tvMovieTitle.text = review.movieTitle
-            binding.tvReviewMeta.text = "${review.username} - ${review.rating}/10 - ${review.dateWatched}"
+            binding.tvReviewMeta.text = "${review.username} - ${review.rating.formatRating()}/5 - ${review.dateWatched}"
             binding.tvComment.text = review.comment.ifBlank { "No comment" }
 
             binding.root.setOnClickListener {
@@ -53,5 +53,13 @@ class ReviewAdapter(
     fun submitList(updatedReviews: List<Review>) {
         reviews = updatedReviews
         notifyDataSetChanged()
+    }
+}
+
+private fun Double.formatRating(): String {
+    return if (this % 1.0 == 0.0) {
+        toInt().toString()
+    } else {
+        toString()
     }
 }

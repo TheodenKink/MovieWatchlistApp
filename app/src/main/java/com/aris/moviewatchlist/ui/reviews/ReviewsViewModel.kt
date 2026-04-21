@@ -32,6 +32,31 @@ class ReviewsViewModel : ViewModel() {
         }
     }
 
+    fun upsertMovieReview(
+        movieId: Int,
+        movieTitle: String,
+        rating: Double,
+        comment: String,
+        dateWatched: String,
+        onSuccess: () -> Unit = {}
+    ) {
+        repository.upsertMovieReview(
+            movieId = movieId,
+            movieTitle = movieTitle,
+            rating = rating,
+            comment = comment,
+            dateWatched = dateWatched
+        ) { success, errorMessage ->
+            handleOperationResult(success, errorMessage, "Review saved", onSuccess)
+        }
+    }
+
+    fun deleteMovieReview(movieId: Int, onSuccess: () -> Unit = {}) {
+        repository.deleteMovieReview(movieId) { success, errorMessage ->
+            handleOperationResult(success, errorMessage, "Review deleted", onSuccess)
+        }
+    }
+
     fun getHighRatingReviews(): LiveData<List<Review>> {
         return repository.getHighRatingReviews()
     }
