@@ -19,17 +19,56 @@
         android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnWatchlists" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/headerActions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvScreenTitle">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReviews"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reviews" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQueries"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Queries" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnWatchlists"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Watchlists" />
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnWatchlists"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnTestReminder"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Watchlists"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="Enable Reminders"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerActions" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMovies"
@@ -40,7 +79,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="88dp"
-        app:layout_constraintTop_toBottomOf="@id/tvScreenTitle"
+        app:layout_constraintTop_toBottomOf="@id/btnTestReminder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

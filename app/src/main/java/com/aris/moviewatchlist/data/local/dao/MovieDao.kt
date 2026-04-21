@@ -25,6 +25,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE genre = :genre ORDER BY year DESC")
     fun getMoviesByGenre(genre: String): LiveData<List<MovieEntity>>
 
+    @Query("SELECT COUNT(*) FROM movies WHERE isWatched = 0")
+    suspend fun getPendingMovieCount(): Int
+
     @Query("DELETE FROM movies")
     suspend fun deleteAllMovies()
 }

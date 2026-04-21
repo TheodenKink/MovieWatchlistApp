@@ -38,6 +38,14 @@ class MovieViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun getWatchedMovies(): LiveData<List<MovieEntity>> {
+        return repository.getWatchedMovies()
+    }
+
+    fun getMoviesByGenre(genre: String): LiveData<List<MovieEntity>> {
+        return repository.getMoviesByGenre(genre)
+    }
+
     fun deleteAllMovies() {
         viewModelScope.launch {
             repository.deleteAllMovies()

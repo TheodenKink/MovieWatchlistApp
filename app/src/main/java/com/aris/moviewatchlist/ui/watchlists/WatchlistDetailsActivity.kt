@@ -4,15 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import com.aris.moviewatchlist.R
 import com.aris.moviewatchlist.databinding.ActivityWatchlistDetailsBinding
 import com.aris.moviewatchlist.ui.movies.AddMovieActivity
+import com.aris.moviewatchlist.ui.movies.MovieAdapter
 
 class WatchlistDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWatchlistDetailsBinding
     private val watchlistViewModel: WatchlistViewModel by viewModels()
-    private lateinit var watchlistMovieAdapter: WatchlistMovieAdapter
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +43,13 @@ class WatchlistDetailsActivity : AppCompatActivity() {
                 binding.recyclerWatchlistMovies.visibility =
                     if (movies.isEmpty()) android.view.View.GONE else android.view.View.VISIBLE
 
-                watchlistMovieAdapter.submitList(movies)
+                movieAdapter.submitList(movies)
             }
         }
     }
 
     private fun setupRecyclerView() {
-        watchlistMovieAdapter = WatchlistMovieAdapter { movie ->
+        movieAdapter = MovieAdapter { movie ->
             val intent = Intent(this, AddMovieActivity::class.java).apply {
                 putExtra("movieId", movie.movieId)
                 putExtra("title", movie.title)
@@ -58,13 +60,17 @@ class WatchlistDetailsActivity : AppCompatActivity() {
                 putExtra("isWatched", movie.isWatched)
                 putExtra("personalRating", movie.personalRating ?: -1f)
                 putExtra("notes", movie.notes ?: "")
+                putExtra("posterUrl", movie.posterUrl)
             }
             startActivity(intent)
         }
 
         binding.recyclerWatchlistMovies.apply {
-            layoutManager = LinearLayoutManager(this@WatchlistDetailsActivity)
-            adapter = watchlistMovieAdapter
+            layoutManager = GridLayoutManager(
+                this@WatchlistDetailsActivity,
+                resources.getInteger(R.integer.movie_grid_span_count)
+            )
+            adapter = movieAdapter
         }
     }
 }

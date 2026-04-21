@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.aris.moviewatchlist.data.local.entity.MovieEntity
 import com.aris.moviewatchlist.data.local.relations.WatchlistMovieCrossRef
+import com.aris.moviewatchlist.data.remote.tmdb.TmdbPosterRepository
 import com.aris.moviewatchlist.databinding.ActivityAddMovieBinding
 import com.aris.moviewatchlist.ui.watchlists.WatchlistViewModel
 import kotlinx.coroutines.launch
@@ -21,8 +22,11 @@ class AddMovieActivity : AppCompatActivity() {
 
     private var movieId: Int = 0
     private var isEditMode: Boolean = false
+    private var originalTitle: String = ""
     private var existingRating: Float? = null
     private var existingNotes: String? = null
+    private var existingPosterUrl: String? = null
+    private val tmdbPosterRepository = TmdbPosterRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +55,7 @@ class AddMovieActivity : AppCompatActivity() {
 
             movieId = intent.getIntExtra("movieId", 0)
             val title = intent.getStringExtra("title").orEmpty()
+            originalTitle = title
             val genre = intent.getStringExtra("genre").orEmpty()
             val year = intent.getIntExtra("year", 0)
             val duration = intent.getIntExtra("duration", 0)
@@ -61,6 +66,7 @@ class AddMovieActivity : AppCompatActivity() {
             existingRating = if (ratingValue >= 0f) ratingValue else null
 
             existingNotes = intent.getStringExtra("notes")
+            existingPosterUrl = intent.getStringExtra("posterUrl")
 
             binding.tvFormTitle.text = "Edit Movie"
             binding.btnSave.text = "Update Movie"
@@ -91,25 +97,33 @@ class AddMovieActivity : AppCompatActivity() {
         val isWatched = binding.cbWatched.isChecked
 
         if (title.isNotEmpty()) {
-            val movie = MovieEntity(
-                movieId = if (isEditMode) movieId else 0,
-                title = title,
-                genre = genre,
-                year = year,
-                duration = duration,
-                platform = platform,
-                isWatched = isWatched,
-                personalRating = existingRating,
-                notes = existingNotes
-            )
+            lifecycleScope.launch {
+                binding.btnSave.isEnabled = false
 
-            if (isEditMode) {
-                movieViewModel.updateMovie(movie)
-            } else {
-                movieViewModel.insertMovie(movie)
+                val titleChanged = !title.equals(originalTitle, ignoreCase = true)
+                val posterUrl = tmdbPosterRepository.findPosterUrl(title)
+                    ?: if (titleChanged) null else existingPosterUrl
+                val movie = MovieEntity(
+                    movieId = if (isEditMode) movieId else 0,
+                    title = title,
+                    genre = genre,
+                    year = year,
+                    duration = duration,
+                    platform = platform,
+                    isWatched = isWatched,
+                    personalRating = existingRating,
+                    notes = existingNotes,
+                    posterUrl = posterUrl
+                )
+
+                if (isEditMode) {
+                    movieViewModel.updateMovie(movie)
+                } else {
+                    movieViewModel.insertMovie(movie)
+                }
+
+                finish()
             }
-
-            finish()
         }
     }
 
@@ -134,7 +148,8 @@ class AddMovieActivity : AppCompatActivity() {
             platform = binding.etPlatform.text.toString().trim(),
             isWatched = binding.cbWatched.isChecked,
             personalRating = existingRating,
-            notes = existingNotes
+            notes = existingNotes,
+            posterUrl = existingPosterUrl
         )
 
         movieViewModel.deleteMovie(movie)

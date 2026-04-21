@@ -1,7 +1,22 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
 }
+
+val localProperties: Properties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { inputStream ->
+        localProperties.load(inputStream)
+    }
+}
+
+val tmdbApiKey = localProperties.getProperty("tmdbApiKey")
+    ?: providers.environmentVariable("TMDB_API_KEY").orNull
+    ?: ""
 
 android {
     namespace = "com.aris.moviewatchlist"
@@ -18,6 +33,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
     }
 
     buildTypes {
@@ -37,6 +53,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -61,6 +78,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui)
 
     implementation(libs.androidx.work.runtime)
+    implementation(libs.coil)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

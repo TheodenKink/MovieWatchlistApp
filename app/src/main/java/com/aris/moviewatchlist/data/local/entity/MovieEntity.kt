@@ -14,5 +14,6 @@ data class MovieEntity(
     val platform: String,
     val isWatched: Boolean = false,
     val personalRating: Float? = null,
-    val notes: String? = null
+    val notes: String? = null,
+    val posterUrl: String? = null
 )

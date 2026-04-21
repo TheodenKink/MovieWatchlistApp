@@ -3,6 +3,7 @@ package com.aris.moviewatchlist.ui.movies
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.aris.moviewatchlist.data.local.entity.MovieEntity
 import com.aris.moviewatchlist.databinding.ItemMovieBinding
 
@@ -24,8 +25,11 @@ class MovieAdapter(
                 onItemClick(movie)
             }
 
-            // προσωρινό placeholder poster
-            binding.imgPoster.setImageResource(android.R.drawable.ic_menu_report_image)
+            binding.imgPoster.load(movie.posterUrl) {
+                placeholder(android.R.drawable.ic_menu_report_image)
+                error(android.R.drawable.ic_menu_report_image)
+                fallback(android.R.drawable.ic_menu_report_image)
+            }
         }
     }
 
