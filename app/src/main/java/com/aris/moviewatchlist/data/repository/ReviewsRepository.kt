@@ -135,6 +135,7 @@ class ReviewsRepository(
         rating: Double,
         comment: String,
         dateWatched: String,
+        posterUrl: String?,
         username: String = "Me",
         onComplete: (Boolean, String?) -> Unit
     ) {
@@ -157,7 +158,8 @@ class ReviewsRepository(
             username = username,
             rating = rating,
             comment = comment,
-            dateWatched = dateWatched
+            dateWatched = dateWatched,
+            posterUrl = posterUrl
         )
 
         reviewsCollection.document(documentId)

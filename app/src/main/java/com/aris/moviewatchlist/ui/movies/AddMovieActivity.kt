@@ -59,13 +59,6 @@ class AddMovieActivity : AppCompatActivity() {
             showAddToWatchlistDialog()
         }
 
-        binding.ratingBarMovie.setOnRatingBarChangeListener { _, rating, _ ->
-            updateRatingLabel(rating)
-        }
-
-        binding.btnClearRating.setOnClickListener {
-            binding.ratingBarMovie.rating = 0f
-        }
     }
 
     private fun readIntentData() {
@@ -99,14 +92,12 @@ class AddMovieActivity : AppCompatActivity() {
             binding.etPlatform.setText(platform)
             binding.cbWatched.isChecked = isWatched
             binding.ratingBarMovie.rating = existingRating ?: 0f
-            updateRatingLabel(binding.ratingBarMovie.rating)
         } else {
             binding.tvFormTitle.text = "Add Movie"
             binding.btnSave.text = "Save Movie"
             binding.btnDelete.visibility = View.GONE
             binding.btnAddToWatchlist.visibility = View.GONE
             binding.cbWatched.isChecked = false
-            updateRatingLabel(0f)
         }
     }
 
@@ -231,18 +222,11 @@ class AddMovieActivity : AppCompatActivity() {
                 movieTitle = movie.title,
                 rating = rating.toDouble(),
                 comment = movie.notes.orEmpty(),
-                dateWatched = currentDate()
+                dateWatched = currentDate(),
+                posterUrl = movie.posterUrl
             )
         } else if (isEditMode) {
             reviewsViewModel.deleteMovieReview(movie.movieId)
-        }
-    }
-
-    private fun updateRatingLabel(rating: Float) {
-        binding.tvRatingValue.text = if (rating > 0f) {
-            "${rating.formatRating()}/5"
-        } else {
-            "No rating"
         }
     }
 
@@ -291,14 +275,6 @@ private fun String.normalizeMovieTitle(): String {
     return trim()
         .replace(Regex("\\s+"), " ")
         .lowercase()
-}
-
-private fun Float.formatRating(): String {
-    return if (this % 1f == 0f) {
-        toInt().toString()
-    } else {
-        toString()
-    }
 }
 
 private fun currentDate(): String {

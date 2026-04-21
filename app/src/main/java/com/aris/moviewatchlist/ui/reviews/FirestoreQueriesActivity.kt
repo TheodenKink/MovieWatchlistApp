@@ -6,7 +6,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
+import com.aris.moviewatchlist.R
 import com.aris.moviewatchlist.data.remote.model.Review
 import com.aris.moviewatchlist.databinding.ActivityFirestoreQueriesBinding
 
@@ -36,7 +37,10 @@ class FirestoreQueriesActivity : AppCompatActivity() {
         )
 
         binding.recyclerReviewQueryResults.apply {
-            layoutManager = LinearLayoutManager(this@FirestoreQueriesActivity)
+            layoutManager = GridLayoutManager(
+                this@FirestoreQueriesActivity,
+                resources.getInteger(R.integer.movie_grid_span_count)
+            )
             adapter = reviewAdapter
         }
     }

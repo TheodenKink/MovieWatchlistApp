@@ -16,6 +16,7 @@ class AddEditReviewActivity : AppCompatActivity() {
 
     private var reviewId: String = ""
     private var isEditMode = false
+    private var existingPosterUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class AddEditReviewActivity : AppCompatActivity() {
         if (intent.hasExtra("reviewId")) {
             isEditMode = true
             reviewId = intent.getStringExtra("reviewId").orEmpty()
+            existingPosterUrl = intent.getStringExtra("posterUrl")
 
             binding.tvFormTitle.text = "Edit Review"
             binding.btnSaveReview.text = "Update Review"
@@ -89,7 +91,8 @@ class AddEditReviewActivity : AppCompatActivity() {
             username = username,
             rating = rating,
             comment = comment,
-            dateWatched = dateWatched
+            dateWatched = dateWatched,
+            posterUrl = existingPosterUrl
         )
 
         if (isEditMode) {

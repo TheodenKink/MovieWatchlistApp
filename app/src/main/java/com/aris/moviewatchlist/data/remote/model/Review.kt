@@ -7,5 +7,6 @@ data class Review(
     val username: String = "",
     val rating: Double = 0.0,
     val comment: String = "",
-    val dateWatched: String = ""
+    val dateWatched: String = "",
+    val posterUrl: String? = null
 )

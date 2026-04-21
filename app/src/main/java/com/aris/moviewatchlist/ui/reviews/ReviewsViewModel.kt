@@ -38,6 +38,7 @@ class ReviewsViewModel : ViewModel() {
         rating: Double,
         comment: String,
         dateWatched: String,
+        posterUrl: String?,
         onSuccess: () -> Unit = {}
     ) {
         repository.upsertMovieReview(
@@ -45,7 +46,8 @@ class ReviewsViewModel : ViewModel() {
             movieTitle = movieTitle,
             rating = rating,
             comment = comment,
-            dateWatched = dateWatched
+            dateWatched = dateWatched,
+            posterUrl = posterUrl
         ) { success, errorMessage ->
             handleOperationResult(success, errorMessage, "Review saved", onSuccess)
         }

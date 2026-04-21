@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.aris.moviewatchlist.data.remote.model.Review
 import com.aris.moviewatchlist.databinding.ItemReviewBinding
 
@@ -21,8 +22,15 @@ class ReviewAdapter(
 
         fun bind(review: Review) {
             binding.tvMovieTitle.text = review.movieTitle
-            binding.tvReviewMeta.text = "${review.username} - ${review.rating.formatRating()}/5 - ${review.dateWatched}"
-            binding.tvComment.text = review.comment.ifBlank { "No comment" }
+            binding.tvReviewMeta.text = "${review.username} - ${review.dateWatched}"
+            binding.tvRating.text = "${review.rating.formatRating()}/5"
+            binding.tvComment.text = review.comment
+            binding.tvComment.visibility = if (review.comment.isBlank()) View.GONE else View.VISIBLE
+            binding.imgPoster.load(review.posterUrl) {
+                placeholder(android.R.drawable.ic_menu_report_image)
+                error(android.R.drawable.ic_menu_report_image)
+                fallback(android.R.drawable.ic_menu_report_image)
+            }
 
             binding.root.setOnClickListener {
                 onItemClick(review)
